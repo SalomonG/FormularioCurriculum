@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrega de Curriculum</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Estilos para el mensaje de confirmación */
+        .confirmation-message {
+            display: none; /* Oculto por defecto */
+            text-align: center;
+            padding: 20px;
+            background-color: #28a745; /* Verde de Bootstrap */
+            color: white;
+            border-radius: 5px;
+            font-size: 1.5em;
+            margin-top: 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Animación para el mensaje */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Ocultar el formulario cuando se envía */
+        .hidden {
+            display: none;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff; /* Fondo azul claro */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff; /* Fondo blanco */
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            position: relative; /* Para posicionar el mensaje de confirmación */
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            max-width: 100px; /* Ajusta el tamaño del logo */
+        }
+
+        h2 {
+            color: #0073e6; /* Azul */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333333; /* Gris oscuro */
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #cccccc; /* Gris claro */
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #0073e6; /* Azul */
+            color: #ffffff; /* Blanco */
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #005bb5; /* Azul más oscuro */
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Espacio para el logo -->
+        <div class="logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo de la empresa">
+        </div>
+
+        <h2>Entrega de Curriculum</h2>
+        <form id="cv-form" action="/" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="cedula">Cédula:</label>
+                <input type="text" id="cedula" name="cedula" required>
+            </div>
+
+            <div class="form-group">
+                <label for="rif">RIF:</label>
+                <input type="text" id="rif" name="rif" required>
+            </div>
+
+            <div class="form-group">
+                <label for="nombres">Nombres:</label>
+                <input type="text" id="nombres" name="nombres" required>
+            </div>
+
+            <div class="form-group">
+                <label for="apellidos">Apellidos:</label>
+                <input type="text" id="apellidos" name="apellidos" required>
+            </div>
+
+            <div class="form-group">
+                <label for="telefono">Número de Teléfono:</label>
+                <input type="text" id="telefono" name="telefono" required>
+            </div>
+
+            <div class="form-group">
+                <label for="correo">Correo Electrónico:</label>
+                <input type="email" id="correo" name="correo" required>
+            </div>
+
+            <div class="form-group">
+                <label for="curriculum">Curriculum (PDF o Word):</label>
+                <input type="file" id="curriculum" name="curriculum" accept=".pdf,.doc,.docx" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+
+        <!-- Mensaje de confirmación -->
+        <div id="confirmation-message" class="confirmation-message">
+            ¡Gracias! Hemos recibido tu currículum correctamente.
+        </div>
+    </div>
+
+    <script>
+        // JavaScript para manejar el envío del formulario
+        document.getElementById('cv-form').addEventListener('submit', function (event) {
+            event.preventDefault(); // Evitar el envío tradicional del formulario
+
+            // Ocultar el formulario
+            document.getElementById('cv-form').classList.add('hidden');
+
+            // Mostrar el mensaje de confirmación
+            const confirmationMessage = document.getElementById('confirmation-message');
+            confirmationMessage.style.display = 'block';
+
+            // Enviar el formulario después de 3 segundos
+            setTimeout(function () {
+                event.target.submit(); // Enviar el formulario
+            }, 30000); // 30000 ms = 30 segundos
+        });
+    </script>
+</body>
+</html>
