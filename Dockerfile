@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . ./
 
 #comando para ejecutar la aplicación
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8003","app:app"]
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8000","app:app"]
 
 # Exponer el puerto 5000 para acceder a la aplicación
-EXPOSE 8003
+EXPOSE 8000

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Candidatos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* PALETA PROFESIONAL - AZUL CORPORATIVO */
+            --color-primario: #0f5ca8;       /* Azul oscuro principal */
+            --color-secundario: #3498db;     /* Azul brillante */
+            --color-exito: #27ae60;          /* Verde esmeralda */
+            --color-info: #2980b9;           /* Azul petróleo */
+            --color-fondo: #ecf0f1;          /* Gris claro de fondo */
+            --color-texto: #2c3e50;          /* Texto oscuro */
+            --color-blanco: #ffffff;         /* Blanco puro */
+            --color-sombra: rgba(0,0,0,0.1);/* Sombra suave */
+        }
+
+        body {
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+        }
+
+        /* BARRA SUPERIOR */
+        .navbar {
+            background-color: var(--color-primario) !important;
+            box-shadow: 0 2px 10px var(--color-sombra);
+        }
+
+        /* ENCABEZADO CON LOGO */
+        .header-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .page-title {
+            color: var(--color-primario);
+            font-weight: 600;
+            margin: 0;
+            padding: 0 1rem;
+        }
+
+        .logo-right {
+            height: 70px;
+            position: absolute;
+            right: 0;
+            filter: drop-shadow(0 2px 4px var(--color-sombra));
+            transition: transform 0.3s ease;
+        }
+
+        .logo-right:hover {
+            transform: scale(1.05);
+        }
+
+        /* TARJETAS ESTADÍSTICAS */
+        .card-stat {
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+        }
+
+        .card-stat.total { 
+            border-color: var(--color-exito);
+            background: linear-gradient(to right, rgba(39, 174, 96, 0.05), var(--color-blanco));
+        }
+
+        .card-stat.cvs { 
+            border-color: var(--color-info);
+            background: linear-gradient(to right, rgba(41, 128, 185, 0.05), var(--color-blanco));
+        }
+
+        .card-stat:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px var(--color-sombra);
+        }
+
+        /* TABLA */
+        .table-responsive { 
+            max-height: 60vh;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px var(--color-sombra);
+        }
+
+        thead {
+            background-color: var(--color-primario);
+            color: var(--color-blanco);
+        }
+
+        /* BOTONES */
+        .btn-primary {
+            background-color: var(--color-secundario);
+            border-color: var(--color-secundario);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-info);
+            border-color: var(--color-info);
+        }
+
+        .btn-outline-primary {
+            color: var(--color-secundario);
+            border-color: var(--color-secundario);
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--color-secundario);
+            color: var(--color-blanco);
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-tachometer-alt me-2"></i>Dashboard RH
+            </a>
+            <div class="navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i>{{ current_user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="/"><i class="fas fa-user-plus me-2"></i>Nuevo Registro</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="container-fluid px-4">
+        <!-- Encabezado con título y logo -->
+        <div class="header-container">
+            <h2 class="page-title">Gestión de Candidatos</h2>
+            <img src="{{ url_for('static', filename='Logo.png') }}" 
+                 alt="Logo Corporativo" 
+                 class="logo-right">
+        </div>
+
+        <!-- Tarjetas de estadísticas -->
+        <div class="row g-4 mb-4">
+            <!-- Tarjeta 1: Total candidatos -->
+            <div class="col-md-4">
+                <div class="card card-stat total h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0 bg-success bg-opacity-10 p-3 rounded">
+                                <i class="fas fa-users fa-2x" style="color: var(--color-exito);"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6 class="text-muted mb-1">Total Candidatos</h6>
+                                <h2 class="mb-0" style="color: var(--color-exito);">{{ total }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tarjeta 2: CVs subidos -->
+            <div class="col-md-4">
+                <div class="card card-stat cvs h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0 bg-info bg-opacity-10 p-3 rounded">
+                                <i class="fas fa-file-pdf fa-2x" style="color: var(--color-info);"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6 class="text-muted mb-1">CVs Subidos</h6>
+                                <h2 class="mb-0" style="color: var(--color-info);">{{ cvs }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tarjeta 3: Último registro -->
+            <div class="col-md-4">
+                <div class="card h-100" style="background: linear-gradient(to right, rgba(44, 62, 80, 0.05), var(--color-blanco));">
+                    <div class="card-body">
+                        <h6 class="text-muted mb-3"><i class="fas fa-clock me-2"></i>Último Registro</h6>
+                        {% if ultimo %}
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-user-tie fa-2x" style="color: var(--color-primario);"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5 class="mb-1">{{ ultimo.nombres }} {{ ultimo.apellidos }}</h5>
+                                <small class="text-muted">{{ ultimo.cedula }} | {{ ultimo.telefono }}</small>
+                            </div>
+                        </div>
+                        {% else %}
+                        <p class="text-muted mb-0">No hay registros</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla de candidatos -->
+        <div class="card border-0 mb-4" style="background-color: var(--color-blanco);">
+            <div class="card-header py-3" style="background-color: var(--color-primario); color: var(--color-blanco);">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-table me-2"></i>Registros Recientes</h5>
+                    <a href="/" class="btn btn-sm btn-light">
+                        <i class="fas fa-plus me-1"></i>Agregar
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Cédula</th>
+                                <th>Nombre</th>
+                                <th>Contacto</th>
+                                <th>CV</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for c in candidatos %}
+                            <tr>
+                                <td>{{ c.cedula }}</td>
+                                <td>
+                                    <strong>{{ c.nombres }} {{ c.apellidos }}</strong>
+                                </td>
+                                <td>
+                                    <small>{{ c.telefono }}<br>{{ c.correo }}</small>
+                                </td>
+                                <td>
+                                    {% if c.curriculum_filename %}
+                                    <a href="/download/{{ c.curriculum_filename }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-download me-1"></i>Descargar
+                                    </a>
+                                    {% else %}
+                                    <span class="badge bg-warning text-dark">Sin CV</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <button onclick="confirmDelete('{{ c._id }}')" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function confirmDelete(id) {
+            if (confirm('¿Eliminar este candidato permanentemente?')) {
+                window.location.href = `/eliminar/${id}`;
+            }
+        }
+    </script>
+</body>
+</html>

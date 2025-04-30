@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Inicio de Sesión</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .login-card {
+            width: 100%;
+            max-width: 450px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header-custom {
+            background-color: #ffffff;
+            color: rgb(0, 0, 0);
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .login-logo {
+            height: 80px;
+            width: auto;
+            margin-bottom: 15px;
+        }
+        
+        .login-title {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="card login-card">
+        <!-- Encabezado de la tarjeta con logo y título -->
+        <div class="card-header card-header-custom">
+            <div class="d-flex flex-column align-items-center">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
+                <h4 class="login-title">INICIO DE SESIÓN</h4>
+            </div>
+        </div>
+        
+        <!-- Cuerpo de la tarjeta con el formulario -->
+        <div class="card-body p-4">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show mb-3">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label">Usuario:</label>
+                    <input type="text" name="username" class="form-control" required>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Contraseña:</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 py-2">
+                    <i class="fas fa-sign-in-alt me-2"></i>Ingresar
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
