@@ -1,5 +1,5 @@
 #Usar una imagen base de Python
-FROM python:3.12-alpine3.18
+FROM python:3.12-alpine
 
 # Establecer el directorio de trabajo dentro del contenedor
 WORKDIR /FormularioCurriculum
